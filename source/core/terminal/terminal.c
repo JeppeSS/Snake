@@ -2,6 +2,9 @@
 
 #include "terminal.h"
 
+#define ESC       "\x1b"
+#define CSI       "\x1b["
+
 typedef struct
 {
     short width;
@@ -19,9 +22,12 @@ enable_console_input_events( void );
 static terminal_size_t
 get_terminal_size( HANDLE output_handle );
 
+static void
+set_title( const char *p_title );
+
 
 terminal_t
-create_terminal( void )
+create_terminal( const char *p_title )
 {
     terminal_t result = { 0 };
     if( !enable_virtual_terminal_mode() )
@@ -56,6 +62,12 @@ create_terminal( void )
         return result;
     }
 
+    if( p_title ) {
+        // TODO[Jeppe]: Add some validation on title size
+        set_title( p_title );
+    }
+
+    // TODO[Jeppe]: I need to add some logic to copy the title to the title member in result
     result = (terminal_t)
     {
         .output_handle = output_handle,
@@ -128,4 +140,13 @@ get_terminal_size( HANDLE output_handle )
     };
 
     return result;
+}
+
+
+static void
+set_title( const char *p_title )
+{
+    fprintf( stdout, "\x1b]0;" );
+    fprintf( stdout, "%s", p_title );
+    fprintf( stdout, "\x07" );
 }

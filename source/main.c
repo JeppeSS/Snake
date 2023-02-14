@@ -6,12 +6,15 @@
 int
 main( void )
 {
-    terminal_t terminal = create_terminal();
+    terminal_t terminal = create_terminal( "Test title" );
     if( !terminal.valid )
     {
         return EXIT_FAILURE;
     }
-    
-    fprintf( stdout, "Hello World!" );
+
+    while(true)
+    {
+        
+    }
     return EXIT_SUCCESS;
 }
