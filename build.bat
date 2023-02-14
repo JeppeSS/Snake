@@ -1,8 +1,20 @@
 @echo off
 
-echo Building...
+rem Allow unicode characters
+chcp 65001 >nul 2>nul
 
-gcc -Wall -Wextra -pedantic -std=c18 source/main.c
+setlocal enabledelayedexpansion
+
+set OUTPUT=snake.exe
+set SOURCES=
+
+for /r %%i in (*.c) do (
+  set SOURCES=!SOURCES! "%%i"
+)
+
+echo 🔧 Building.
+
+gcc -Wall -Wextra -pedantic -I./src -std=c18 %SOURCES% -o %OUTPUT%
 
 
 if %errorlevel% neq 0 (
